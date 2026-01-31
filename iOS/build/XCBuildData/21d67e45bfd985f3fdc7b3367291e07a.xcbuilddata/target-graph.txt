@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'TPad' in project 'TPad' (no dependencies)
