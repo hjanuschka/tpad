@@ -1,14 +1,22 @@
 # T-Pad
 
 <p align="center">
+  <img src="icon.png" width="150" alt="T-Pad Icon">
+</p>
+
+<p align="center">
+  <strong>Turn your iPhone into a wireless trackpad for your Mac.</strong>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/platform-iOS%2016%2B%20%7C%20macOS%2013%2B-blue" alt="Platform">
   <img src="https://img.shields.io/badge/swift-5.9-orange" alt="Swift">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
 
-**Turn your iPhone into a wireless trackpad for your Mac.**
-
 Perfect for when your Magic Mouse dies, you're presenting from across the room, or you just prefer trackpad gestures. Zero configuration — just connect and go.
+
+---
 
 ---
 
