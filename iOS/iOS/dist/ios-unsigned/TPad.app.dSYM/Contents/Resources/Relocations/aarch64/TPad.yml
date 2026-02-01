@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/hjanuschka/lab/phonemouse/TPad/iOS/iOS/dist/ios-unsigned/TPad.app/TPad'
+relocations:     []
+...
