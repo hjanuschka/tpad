@@ -32,65 +32,96 @@ Perfect for when your Magic Mouse dies, you're presenting from across the room, 
 
 ---
 
-## 📱 Screenshots
+## 📥 Installation
 
-```
-┌─────────────────────────┐
-│         T-Pad           │
-│                         │
-│  ┌───────────────────┐  │
-│  │                   │  │
-│  │    Touch here     │  │
-│  │    to control     │  │
-│  │    your Mac       │  │
-│  │                   │  │
-│  └───────────────────┘  │
-│                         │
-│  Speed: ●━━━━━━━━━━━━━  │
-│                         │
-│  [  Connect to Mac  ]   │
-└─────────────────────────┘
-```
+### macOS Server
 
----
+1. Download `TPad-x.x.x-mac.dmg` from [Releases](https://github.com/hjanuschka/tpad/releases)
+2. Open the DMG and drag **T-Pad** to Applications
+3. Launch T-Pad from Applications
+4. Grant **Accessibility** permission when prompted:
+   > System Settings → Privacy & Security → Accessibility → Enable T-Pad
 
-## 🚀 Quick Start
+The server runs in your menu bar — look for the 👆 icon.
 
-### 1. Install the Mac Server
+### iOS App
+
+Since T-Pad isn't on the App Store, you'll need to install it using one of these methods:
+
+#### Option 1: Build with Xcode (Recommended)
+
+Requires: Mac with Xcode 15+, Apple ID (free)
 
 ```bash
+# Clone the repo
 git clone https://github.com/hjanuschka/tpad.git
 cd tpad
-make mac
-open macOS/TPad.app
-```
 
-Grant **Accessibility** permission when prompted:
-> System Settings → Privacy & Security → Accessibility → Enable T-Pad
-
-### 2. Install the iOS App
-
-**Option A: Build from source**
-```bash
-make ios DEVELOPMENT_TEAM=YOUR_TEAM_ID
-```
-
-**Option B: Open in Xcode**
-```bash
+# Open in Xcode
 open iOS/TPad.xcodeproj
 ```
 
-### 3. Connect
+In Xcode:
+1. Select your iPhone as the build target
+2. Go to **Signing & Capabilities**
+3. Select your **Team** (your Apple ID)
+4. Click **Run** (⌘R)
 
-1. Ensure both devices are on the same WiFi network
-2. Open T-Pad on your iPhone
-3. Tap **Connect to Mac**
-4. Select your Mac from the list
-5. Start using your phone as a trackpad!
+> **Note:** Free Apple IDs require re-installing every 7 days. Paid developer accounts last 1 year.
+
+#### Option 2: AltStore / SideStore
+
+1. Install [AltStore](https://altstore.io/) or [SideStore](https://sidestore.io/) on your iPhone
+2. Download `TPad-x.x.x-ios.ipa` from [Releases](https://github.com/hjanuschka/tpad/releases)
+3. Open the IPA with AltStore/SideStore to install
+
+#### Option 3: Sideloadly (Windows/Mac)
+
+1. Download [Sideloadly](https://sideloadly.io/)
+2. Download `TPad-x.x.x-ios.ipa` from [Releases](https://github.com/hjanuschka/tpad/releases)
+3. Connect your iPhone via USB
+4. Drag the IPA into Sideloadly and sign with your Apple ID
+
+#### Option 4: Xcode Command Line
+
+```bash
+# Clone and build
+git clone https://github.com/hjanuschka/tpad.git
+cd tpad
+
+# Build for your device (replace TEAM_ID with your Apple Developer Team ID)
+xcodebuild -project iOS/TPad.xcodeproj \
+  -target TPad \
+  -sdk iphoneos \
+  -configuration Release \
+  CODE_SIGN_STYLE=Automatic \
+  DEVELOPMENT_TEAM=YOUR_TEAM_ID \
+  CONFIGURATION_BUILD_DIR=build \
+  build
+
+# Install to connected device
+xcrun devicectl device install app --device YOUR_DEVICE_UDID build/TPad.app
+```
+
+Find your device UDID with:
+```bash
+xcrun devicectl list devices
+```
 
 ---
 
-## 🛠️ Building
+## 🚀 Usage
+
+1. Ensure both devices are on the **same WiFi network**
+2. Launch **T-Pad** on your Mac (menu bar icon appears)
+3. Open **T-Pad** on your iPhone
+4. Tap **Connect to Mac**
+5. Select your Mac from the list
+6. Use the trackpad area to control your cursor!
+
+---
+
+## 🛠️ Building from Source
 
 ### Requirements
 
@@ -105,7 +136,7 @@ open iOS/TPad.xcodeproj
 # Build macOS server
 make mac
 
-# Build iOS app (requires Xcode and signing)
+# Build iOS app
 make ios DEVELOPMENT_TEAM=YOUR_TEAM_ID
 
 # Run macOS server
@@ -113,25 +144,6 @@ make run
 
 # Clean build artifacts
 make clean
-```
-
-### Manual Build
-
-**macOS Server:**
-```bash
-swift build -c release
-.build/release/TPadServer
-```
-
-**iOS App:**
-```bash
-xcodebuild -project iOS/TPad.xcodeproj \
-  -target TPad \
-  -sdk iphoneos \
-  -configuration Release \
-  CODE_SIGN_STYLE=Automatic \
-  DEVELOPMENT_TEAM=YOUR_TEAM_ID \
-  build
 ```
 
 ---
@@ -196,20 +208,25 @@ tpad/
 
 **Mac not appearing in the list?**
 - Ensure both devices are on the same WiFi network
-- Check that T-Pad server is running (look for icon in menu bar)
+- Check that T-Pad server is running (look for 👆 icon in menu bar)
 - Try restarting the T-Pad server
 
 **Cursor not moving?**
 - Grant Accessibility permission to T-Pad in System Settings
 - You may need to remove and re-add the permission after updates
 
+**iOS app won't install?**
+- Free Apple IDs can only have 3 sideloaded apps at a time
+- Try removing other sideloaded apps first
+- Ensure your device is trusted on your Mac
+
+**"Untrusted Developer" error on iOS?**
+- Go to Settings → General → VPN & Device Management
+- Tap your developer profile and tap "Trust"
+
 **Connection drops frequently?**
 - Move closer to your WiFi router
 - Check for network congestion
-
-**High latency?**
-- T-Pad uses UDP for minimal latency
-- If you experience lag, your network may be congested
 
 ---
 
