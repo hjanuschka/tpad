@@ -14,7 +14,7 @@ struct ContentView: View {
                     .fill(statusColor)
                     .frame(width: 10, height: 10)
                 
-                Text(client.connectionState.description)
+                Text(statusText)
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.8))
                 
@@ -34,7 +34,7 @@ struct ContentView: View {
                     if case .connected = client.connectionState {
                         client.disconnect()
                     } else {
-                        client.startSearching()
+                        client.startBrowsing()
                         showingServerPicker = true
                     }
                 }) {
@@ -69,7 +69,7 @@ struct ContentView: View {
                         .foregroundColor(.white.opacity(0.5))
                     
                     Button(action: {
-                        client.startSearching()
+                        client.startBrowsing()
                         showingServerPicker = true
                     }) {
                         Label("Connect to Mac", systemImage: "laptopcomputer")
@@ -100,6 +100,15 @@ struct ContentView: View {
         case .disconnected: return .red
         case .searching, .connecting: return .yellow
         case .connected: return .green
+        }
+    }
+    
+    var statusText: String {
+        switch client.connectionState {
+        case .disconnected: return "Disconnected"
+        case .searching: return "Searching..."
+        case .connecting: return "Connecting..."
+        case .connected(let name, let type): return "\(name) (\(type.rawValue))"
         }
     }
     
@@ -194,7 +203,7 @@ struct ServerPickerView: View {
     var body: some View {
         NavigationView {
             List {
-                if client.discoveredServices.isEmpty {
+                if client.discoveredServers.isEmpty {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.5)
@@ -208,35 +217,27 @@ struct ServerPickerView: View {
                     .padding(.vertical, 40)
                     .listRowBackground(Color.clear)
                 } else {
-                    ForEach(client.discoveredServices, id: \.endpoint) { service in
-                        Button(action: {
-                            client.connect(to: service)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                client.sendSensitivity(Float(sensitivity))
-                            }
-                            isPresented = false
-                        }) {
-                            HStack {
-                                Image(systemName: "desktopcomputer")
-                                    .font(.title2)
-                                    .foregroundColor(.blue)
-                                    .frame(width: 40)
-                                
-                                VStack(alignment: .leading) {
-                                    Text(service.serviceName)
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
-                                    Text("T-Pad Server")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
+                    // WiFi servers
+                    let wifiServers = client.discoveredServers.filter { $0.type == .wifi }
+                    if !wifiServers.isEmpty {
+                        Section(header: Label("WiFi", systemImage: "wifi")) {
+                            ForEach(wifiServers) { server in
+                                ServerRow(server: server) {
+                                    connectTo(server)
                                 }
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary)
                             }
-                            .padding(.vertical, 8)
+                        }
+                    }
+                    
+                    // Bluetooth servers
+                    let btServers = client.discoveredServers.filter { $0.type == .bluetooth }
+                    if !btServers.isEmpty {
+                        Section(header: Label("Bluetooth", systemImage: "bluetooth")) {
+                            ForEach(btServers) { server in
+                                ServerRow(server: server) {
+                                    connectTo(server)
+                                }
+                            }
                         }
                     }
                 }
@@ -246,12 +247,12 @@ struct ServerPickerView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        client.stopSearching()
+                        client.stopBrowsing()
                         isPresented = false
                     }
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: { client.startSearching() }) {
+                    Button(action: { client.startBrowsing() }) {
                         Image(systemName: "arrow.clockwise")
                     }
                 }
@@ -259,9 +260,48 @@ struct ServerPickerView: View {
         }
         .presentationDetents([.medium])
         .onAppear {
-            if client.discoveredServices.isEmpty {
-                client.startSearching()
+            if client.discoveredServers.isEmpty {
+                client.startBrowsing()
             }
+        }
+    }
+    
+    private func connectTo(_ server: DiscoveredServer) {
+        client.connect(to: server)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            client.sendSensitivity(Float(sensitivity))
+        }
+        isPresented = false
+    }
+}
+
+struct ServerRow: View {
+    let server: DiscoveredServer
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(systemName: server.type == .wifi ? "desktopcomputer" : "desktopcomputer")
+                    .font(.title2)
+                    .foregroundColor(server.type == .wifi ? .blue : .purple)
+                    .frame(width: 40)
+                
+                VStack(alignment: .leading) {
+                    Text(server.name)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(server.type == .wifi ? "WiFi Connection" : "Bluetooth Connection")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 8)
         }
     }
 }

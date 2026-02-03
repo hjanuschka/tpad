@@ -2,15 +2,19 @@ import Foundation
 
 // MARK: - Network Configuration
 
-enum TPadConfig {
-    static let serviceType = "_tpad._udp"
-    static let serviceDomain = "local."
-    static let defaultPort: UInt16 = 5679
+public enum TPadConfig {
+    public static let serviceType = "_tpad._udp"
+    public static let serviceDomain = "local."
+    public static let defaultPort: UInt16 = 5679
+    
+    // Bluetooth UUIDs
+    public static let bluetoothServiceUUID = "B5E6D143-7A8E-4F3C-9D2A-1E8C4F5A6B7D"
+    public static let bluetoothCharacteristicUUID = "C8F2E951-3B4D-4A6E-8C1F-2D9E5A7B3C8F"
 }
 
 // MARK: - Message Types
 
-enum MessageType: UInt8, Codable {
+public enum MessageType: UInt8, Codable {
     case move = 1
     case leftClick = 2
     case rightClick = 3
@@ -27,42 +31,24 @@ enum MessageType: UInt8, Codable {
 
 // MARK: - Mouse Event Message
 
-struct MouseMessage: Codable {
-    let type: MessageType
-    let deltaX: Float
-    let deltaY: Float
-    let timestamp: UInt64
+public struct MouseMessage: Codable {
+    public let type: MessageType
+    public let deltaX: Float
+    public let deltaY: Float
+    public let timestamp: UInt64
     
-    init(type: MessageType, deltaX: Float = 0, deltaY: Float = 0) {
+    public init(type: MessageType, deltaX: Float = 0, deltaY: Float = 0) {
         self.type = type
         self.deltaX = deltaX
         self.deltaY = deltaY
         self.timestamp = UInt64(Date().timeIntervalSince1970 * 1000)
     }
     
-    func encode() -> Data? {
+    public func encode() -> Data? {
         try? JSONEncoder().encode(self)
     }
     
-    static func decode(from data: Data) -> MouseMessage? {
+    public static func decode(from data: Data) -> MouseMessage? {
         try? JSONDecoder().decode(MouseMessage.self, from: data)
-    }
-}
-
-// MARK: - Connection State
-
-enum ConnectionState: Equatable {
-    case disconnected
-    case searching
-    case connecting
-    case connected(String)
-    
-    var description: String {
-        switch self {
-        case .disconnected: return "Disconnected"
-        case .searching: return "Searching..."
-        case .connecting: return "Connecting..."
-        case .connected(let host): return "Connected to \(host)"
-        }
     }
 }

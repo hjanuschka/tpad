@@ -36,7 +36,8 @@ Perfect for when your Magic Mouse dies, you're presenting from across the room, 
 - ⚡ **Low latency** — UDP protocol for real-time responsiveness  
 - 🔧 **Adjustable sensitivity** — customize cursor speed to your preference
 - 🔍 **Auto-discovery** — finds your Mac automatically via Bonjour/mDNS
-- 🔒 **Local network only** — no internet, no cloud, no tracking
+- 📶 **WiFi + Bluetooth** — works on same network OR via Bluetooth (great for corporate networks!)
+- 🔒 **Local only** — no internet, no cloud, no tracking
 
 ---
 

@@ -12,6 +12,8 @@
 		003 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103; };
 		004 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104; };
 		005 /* TouchpadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105; };
+		006 /* AppIcon60x60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 106; };
+		007 /* AppIcon60x60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 107; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		103 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		104 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		105 /* TouchpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchpadView.swift; sourceTree = "<group>"; };
+		106 /* AppIcon60x60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon60x60@2x.png"; sourceTree = "<group>"; };
+		107 /* AppIcon60x60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon60x60@3x.png"; sourceTree = "<group>"; };
 		200 /* TPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TPad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -50,6 +54,8 @@
 				103 /* NetworkClient.swift */,
 				104 /* Protocol.swift */,
 				105 /* TouchpadView.swift */,
+				106 /* AppIcon60x60@2x.png */,
+				107 /* AppIcon60x60@3x.png */,
 			);
 			path = TPad;
 			sourceTree = "<group>";
@@ -72,7 +78,6 @@
 				501 /* Sources */,
 				300 /* Frameworks */,
 				502 /* Resources */,
-				503 /* Copy Assets */,
 			);
 			buildRules = (
 			);
@@ -121,27 +126,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006 /* AppIcon60x60@2x.png in Resources */,
+				007 /* AppIcon60x60@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		503 /* Copy Assets */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Assets";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "# Compile asset catalog manually\nxcrun actool --compile \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\" --platform iphoneos --minimum-deployment-target 18.0 --app-icon AppIcon --output-partial-info-plist \"${TEMP_DIR}/assetcatalog_generated_info.plist\" \"${SRCROOT}/TPad/Assets.xcassets\" 2>/dev/null || true\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		501 /* Sources */ = {
@@ -196,7 +186,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -259,7 +249,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
